@@ -61,26 +61,27 @@ To download all files in a subdirectory, use:
 ```console
 $ wget --recursive --no-parent --no-host-directories --relative --reject="index.html*" https://diffusion-policy.cs.columbia.edu/data/experiments/low_dim/square_ph/diffusion_policy_cnn/
 ```
+--->
 
 ## 🛠️ Installation
+<!--
 ### 🖥️ Simulation
 To reproduce our simulation benchmark results, install our conda environment on a Linux machine with Nvidia GPU. On Ubuntu 20.04 you need to install the following apt packages for mujoco:
+--->
 ```console
 $ sudo apt install -y libosmesa6-dev libgl1-mesa-glx libglfw3 patchelf
 ```
 
-We recommend [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge) instead of the standard anaconda distribution for faster installation: 
 ```console
 $ mamba env create -f conda_environment.yaml
 ```
 
-but you can use conda as well: 
 ```console
-$ conda env create -f conda_environment.yaml
+[diffusion_policy]$ conda activate skills
+(skills)[diffusion_policy]$ wandb login
 ```
 
-The `conda_environment_macos.yaml` file is only for development on MacOS and does not have full support for benchmarks.
-
+<!--
 ### 🦾 Real Robot
 Hardware (for Push-T):
 * 1x [UR5-CB3](https://www.universal-robots.com/cb3) or [UR5e](https://www.universal-robots.com/products/ur5-robot/) ([RTDE Interface](https://www.universal-robots.com/articles/ur/interface-communication/real-time-data-exchange-rtde-guide/) is required)

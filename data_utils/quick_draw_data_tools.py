@@ -10,16 +10,7 @@ import os
 class DataTools():
     def __init__(self):
         self.classes = [
-             "moon",
-             "airplane",
-             "fish",
-             "umbrella",
-             "train",
-             "spider",
-             "shoe",
-             "apple",
-             "lion",
-             "bus",
+             "line",
         ]
 
     def format_data(self):

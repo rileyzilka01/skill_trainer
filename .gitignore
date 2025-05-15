@@ -10,11 +10,13 @@ doodle_env
 venv
 data_utils/doodle_data.csv
 data_utils/outputs
-doodle_env
-venv
-data_utils/doodle_data.csv
-data_utils/outputs
 data_utils/data
+data_utils/data_utils_env
+
+eval/*
+
+# data to plot 
+cnn/data_files
 cnn/data_files/*
 cnn/training_metrics/*
 
@@ -36,9 +38,6 @@ images_uofa/
 so_many_images/
 images_denoise_fig/
 pw_experiment_generations/
-
-# data to plot 
-/cnn/data_files
 
 ray/auth.json
 

@@ -13,7 +13,7 @@ import random
 class DataTools():
 	def __init__(self):
 		self.difficulty = "easy"
-		self.class_name = "smiley_face"
+		self.class_name = "line"
 
 	def download_data(self):
 		"""
@@ -50,64 +50,75 @@ class DataTools():
 		csv = writer(train)
 
 		classes = df["word"].unique().tolist()
-		if self.class_name:
-			if self.class_name == "smiley_face":
-				class_group = ["smiley face"]
-		else:
-			if self.difficulty == "easy":
-				class_group = random.sample(classes, 10)
-			elif self.difficulty == "medium":
-				class_group = random.sample(classes, 25)
-			elif self.difficulty == "hard":
-				class_group = random.sample(classes, 100)
+		# if self.class_name:
+		# 	if self.class_name == "smiley_face":
+		# 		class_group = ["smiley face"]
+		# else:
+		# 	if self.difficulty == "easy":
+		# 		class_group = random.sample(classes, 10)
+		# 	elif self.difficulty == "medium":
+		# 		class_group = random.sample(classes, 25)
+		# 	elif self.difficulty == "hard":
+		# 		class_group = random.sample(classes, 100)
 
-		if self.difficulty != "full":
+		# if self.difficulty != "full":
+		# 	filtered_trajectories = df[df["word"].isin(class_group)]
+		# 	print(filtered_trajectories["word"].unique())
+
+		# 	print("Converting to nested list")
+		# 	data = filtered_trajectories.values.tolist()
+		# else:
+		# 	data = df.values.tolist()
+
+		temp_classes = ["line", "circle", "clock"]
+
+		for class_name in temp_classes:
+			self.class_name = class_name
+			class_group = [self.class_name]
 			filtered_trajectories = df[df["word"].isin(class_group)]
 			print(filtered_trajectories["word"].unique())
 
 			print("Converting to nested list")
 			data = filtered_trajectories.values.tolist()
-		else:
-			data = df.values.tolist()
 
-		print("Writing each image to new format")
-		for dp in tqdm(range(len(data)), desc="Datapoint"):
-			
-			strokes = ast.literal_eval(data[dp][1])
-			new_format = []
+			print("Writing each image to new format")
+			for dp in tqdm(range(len(data)), desc="Datapoint"):
+				
+				strokes = ast.literal_eval(data[dp][1])
+				new_format = []
 
-			for i in range(len(strokes)):
-				stroke = strokes[i]
-				x = stroke[0]
-				y = stroke[1]
+				for i in range(len(strokes)):
+					stroke = strokes[i]
+					x = stroke[0]
+					y = stroke[1]
 
-				new_format.append([x[0], y[0], 0, 0])
-				for j in range(1, len(x)):
-					new_format.append([x[j], y[j], 1, 0])
+					new_format.append([x[0], y[0], 0, 0])
+					for j in range(1, len(x)):
+						new_format.append([x[j], y[j], 1, 0])
 
-			new_format[-1][-1] = 1
-			csv.writerow([data[dp][0], str(new_format)])
+				new_format[-1][-1] = 1
+				csv.writerow([data[dp][0], str(new_format)])
 
-		print("Writing data to file")
-		train.seek(0) # we need to get back to the start of the BytesIO
-		df = pd.read_csv(train)
+			print("Writing data to file")
+			train.seek(0) # we need to get back to the start of the BytesIO
+			df = pd.read_csv(train)
 
-		if self.class_name:
-			prefix = self.class_name
-		else:
-			prefix = self.difficulty
+			if self.class_name:
+				prefix = self.class_name
+			else:
+				prefix = self.difficulty
 
-		# Collect all class names to create a one-hot encoding
-		classes = df.iloc[:,0].unique().tolist()
+			# Collect all class names to create a one-hot encoding
+			classes = df.iloc[:,0].unique().tolist()
 
-		classes = sorted(classes)
-		class_to_index = {cls: idx for idx, cls in enumerate(classes)}
+			classes = sorted(classes)
+			class_to_index = {cls: idx for idx, cls in enumerate(classes)}
 
-		with open(f'./outputs/{prefix}_class_index.json', 'w') as f:
-			json.dump(class_to_index, f)
+			with open(f'./outputs/{prefix}_class_index.json', 'w') as f:
+				json.dump(class_to_index, f)
 
-		# Save the dataframe
-		df.to_csv(f'./outputs/{prefix}_data_train.csv', index=False)
+			# Save the dataframe
+			df.to_csv(f'./outputs/{prefix}_data_train.csv', index=False)
 
 
 def main():

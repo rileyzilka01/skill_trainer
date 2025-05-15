@@ -18,6 +18,7 @@ from matplotlib.colors import LinearSegmentedColormap
 # Increase the CSV field size limit to avoid _csv.Error: field larger than field limit
 csv.field_size_limit(sys.maxsize)
 
+
 def read_data(file_path):
     data_dict = {}
     with open(file_path, 'r') as csvfile:
@@ -34,9 +35,11 @@ def read_data(file_path):
             i += 1
     return data_dict
 
+
 def ensure_folder(folder_name):
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
+
 
 def plot_drawing(data, doodle_name, output_folder="big_grid_images", num=1):
     ensure_folder(output_folder)
@@ -143,6 +146,7 @@ def plot_colored_drawing(data, doodle_name, output_folder="images", num=1):
     plt.close(fig)
     print(f"Image saved to {output_file}")
 
+
 def plot_drawing_gif(data, doodle_name, output_folder="images", num=1):
     ensure_folder(output_folder)
     output_file = os.path.join(output_folder, f"{doodle_name}_drawing_{num}.gif")
@@ -174,6 +178,7 @@ def plot_drawing_gif(data, doodle_name, output_folder="images", num=1):
     ani.save(output_file, writer=PillowWriter(fps=10))
     plt.close(fig)
     print(f"GIF saved to {output_file}")
+
 
 def plot_denoising_steps_colored_gif(traj_data, doodle_name, output_folder="images", num=1, index=1):
     """
@@ -277,6 +282,7 @@ def plot_denoising_steps_colored_static(traj_data, doodle_name, output_folder="i
 def ensure_folder(folder_path):
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
+
 
 def plot_final_trajectories_with_noise_and_final(traj_data, doodle_name, output_folder="images", index=1):
     """
@@ -388,7 +394,6 @@ def plot_final_trajectories_with_noise_and_final(traj_data, doodle_name, output_
     print(f"Final trajectory image with noise and final lines saved to {output_file}")
 
     
-
 def create_grids(image_dir, class_index_path, output_dir, frame_duration=100):
     # Load class index
     with open(class_index_path, 'r') as f:
@@ -485,6 +490,7 @@ def create_grids(image_dir, class_index_path, output_dir, frame_duration=100):
                 png_grid = create_image_grid(png_images, (5, 5))
                 png_grid.save(os.path.join(output_dir, f"{cls}_grid.png"))
 
+
 def create_image_grid(images, grid_size):
     """Create a grid of images."""
     if not images:
@@ -501,6 +507,7 @@ def create_image_grid(images, grid_size):
         grid_image.paste(image, (x, y))
     
     return grid_image
+
 
 def create_40x22_grid(image_dir, class_index_path, output_dir, grid_size=(40, 22), cell_size=(30, 30)):
     # Load class index
@@ -607,7 +614,7 @@ def plot_denoising_steps_colored_image(traj_data, doodle_name, output_folder="im
 
 if __name__ == "__main__":
 
-    output_folder = "images"
+    output_folder = "eval/drawings/"
 
     # Plot all images of a class overlayed on top of each other images 
     # plot_merged_drawing(output_folder)
@@ -624,15 +631,23 @@ if __name__ == "__main__":
     #         continue
 
     # Plot denoising steps as gif
-    traj_data_dict = read_data('/home/odin/DiffusionPolicy/cnn/data_files/traj_data_good_fig.csv')
+    # traj_data_dict = read_data('/home/odin/DiffusionPolicy/cnn/data_files/traj_data_good_fig.csv')
 
-    for doodle_name, traj_data in traj_data_dict.items():        
-        # plot_denoising_steps_colored_gif(traj_data, doodle_name, output_folder=output_folder, num=6, index=1)
-        # if (doodle_name.split('_')[0] == 'circle' or doodle_name.split('_')[0] == 'triangle' or doodle_name.split('_')[0] == 'star'):
-            # plot_final_trajectories_with_noise_and_final(traj_data, doodle_name, output_folder="images", index=1)
-            # plot_denoising_steps_colored_static(traj_data, doodle_name, output_folder="images", num=1, index=1)
-        plot_denoising_steps_colored_image(traj_data, doodle_name, output_folder="images", num_steps=6, index=1)
+    # for doodle_name, traj_data in traj_data_dict.items():        
+    #     # plot_denoising_steps_colored_gif(traj_data, doodle_name, output_folder=output_folder, num=6, index=1)
+    #     # if (doodle_name.split('_')[0] == 'circle' or doodle_name.split('_')[0] == 'triangle' or doodle_name.split('_')[0] == 'star'):
+    #         # plot_final_trajectories_with_noise_and_final(traj_data, doodle_name, output_folder="images", index=1)
+    #         # plot_denoising_steps_colored_static(traj_data, doodle_name, output_folder="images", num=1, index=1)
+    #     plot_denoising_steps_colored_image(traj_data, doodle_name, output_folder="images", num_steps=6, index=1)
     
     # Plot gird of classes
     # create_grids('./images', './data/doodle/20_hot_class_index.json', './output_grids')
     # create_40x22_grid('./images', './data/doodle/20_hot_class_index.json', './output_grids')
+
+    # Plot each drawing
+    data = read_data('eval/generated.csv')
+
+    i = 0
+    for doodle_name, data in data.items():
+        plot_drawing(data, "line", output_folder=output_folder, num=i)
+        i += 1

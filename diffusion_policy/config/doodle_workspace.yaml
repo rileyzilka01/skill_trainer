@@ -59,7 +59,7 @@ policy:
   target_sigma_min: 0.1
   map_from_last_obs: False
   obs_encoder:
-    n_classes: 26 # 25 classes +1 for null token
+    n_classes: 2 # 1 class +1 for null token
     n_emb: 16
 
 

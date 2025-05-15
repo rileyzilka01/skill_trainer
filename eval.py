@@ -22,6 +22,10 @@ Odin: Effects of W,P experiment P=0.25
 Odin: Effects of W,P experiment P=0.01
 /home/odin/DiffusionPolicy/data/outputs/2024.12.14/17.50.54_flow_matching_doodle/checkpoints/latest.ckpt
 
+
+RECENT SKILL EXPERIMENT
+python3 eval.py --checkpoint "/home/rzilka/skill_trainer/data/outputs/2025.05.15/11.39.58_flow_matching_doodle/checkpoints/latest.ckpt" -o /tmp
+
 """
 
 import sys
@@ -49,8 +53,8 @@ from diffusion_policy.common.pytorch_util import dict_apply
 from torch.utils.data import DataLoader, RandomSampler
 
 extra = "_uncond"
-output_file = f'./cnn/data_files/generated_data{extra}.csv'
-index_file = f'./cnn/data_files/data{extra}_index.json'
+output_file = f'eval/generated.csv'
+index_file = f'data_utils/outputs/line_class_index.json'
 
 class Collector:
     def __init__(self):
@@ -117,11 +121,12 @@ def generate(checkpoint, output_dir, save_traj, device='cuda:0', generation_file
     random.seed(10)
     query_size = 100
     manual = True
-    class_num = 20
-    for class_num in tqdm(range(26), desc="class"):
+    class_num = 1
+    num_classes = 1 
+    for class_num in tqdm(range(num_classes), desc="class"):
         for _ in tqdm(range(num_samples // query_size)):
             if not manual:
-                query = random.sample(range(1, 26), query_size)
+                query = random.sample(range(1, num_classes+1), query_size)
             else:
                 query = [class_num] * query_size
 
@@ -179,7 +184,7 @@ def generate(checkpoint, output_dir, save_traj, device='cuda:0', generation_file
         traj_eval.seek(0)
         traj_df = pd.read_csv(traj_eval, header=None)
         traj_df.columns = ['word', 'trajectory']
-        traj_df.to_csv(f'./cnn/data_files/traj_data_{file_num}_good_figs.csv', index=False)
+        traj_df.to_csv(f'eval/results.csv', index=False)
 
 
 @click.command()

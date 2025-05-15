@@ -15,13 +15,13 @@ shape_meta:
 
 task_name: square
 dataset_type: ph
-dataset_path: data/doodle/data_train.csv
+dataset_path: data_utils/outputs/line_data_train.csv
 abs_action: False
 resize_shape: null
 
 env_runner:
   _target_: diffusion_policy.env_runner.doodle_runner.DoodleRunner
-  n_classes: 26
+  n_classes: 1
 
 dataset:
   _target_: diffusion_policy.dataset.doodle_dataset.DoodleDataset
